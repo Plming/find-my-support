@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>검색 결과</title>
+    <script src="test.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="960_12_col.css" />
+
+    <style>
+        h1 {
+            background-color: skyblue;
+        }
+
+        .grid_3 {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <template id="node">
+        <div class="grid_3" onclick="location.href=''" style="cursor: pointer;">
+            <h2>서비스명</h2>
+            <h3>부서명</h3>
+        </div>
+    </template>
+
+    <!-- DEBUG -->
+    <!-- <div id="query-test">
+        <h1>Query String Test</h1>
+    </div> -->
+
+    <div id="api-call-test" class="container_12">
+        <h1>받을 수 있는 서비스</h1>
+
+    </div>
+</body>
+
+</html>
