@@ -1,0 +1,19 @@
+{
+  "name": "find-my-support",
+  "version": "1.0.0",
+  "description": "웹프로그래밍 프로젝트",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Plming/find-my-support.git"
+  },
+  "author": "Plming",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Plming/find-my-support/issues"
+  },
+  "homepage": "https://github.com/Plming/find-my-support#readme"
+}
