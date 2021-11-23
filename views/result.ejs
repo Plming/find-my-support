@@ -2,29 +2,21 @@
 
 <html lang="ko" class="h-100">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
 
-    <title>Result</title>
-    <script src="/js/test.js"></script>
     <link
       rel="canonical"
       href="https://getbootstrap.com/docs/5.1/examples/cover/"
     />
 
+    <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
 
     <!-- Favicons -->
     <link
@@ -75,11 +67,9 @@
       }
     </style>
 
-    <!-- Custom styles for this template -->
-    <link
-      href="./Cover Template · Bootstrap v5.1_files/cover.css"
-      rel="stylesheet"
-    />
+    <link href="cover.css" rel="stylesheet" />
+
+    <title>Result</title>
   </head>
 
   <body class="d-flex h-100 text-center text-white bg-dark">
@@ -109,21 +99,11 @@
       </header>
 
       <main class="px-3">
-        <template id="node">
-          <div class="col" onclick="location.href=''" style="cursor: pointer">
-            <h3>서비스명</h3>
-            <h4>부서명</h4>
+          <div class="row">
+              <% for(let i = 0; i < serviceList.length; ++i) { %>
+                <%- include('card', {service: serviceList[i]}) %> 
+                <% } %>
           </div>
-        </template>
-
-        <!-- DEBUG -->
-        <!-- <div id="query-test">
-            <h1>Query String Test</h1>
-        </div> -->
-
-        <div id="api-call-test" class="row">
-          <!-- <h1>받을 수 있는 서비스</h1> -->
-        </div>
       </main>
 
       <footer class="mt-auto text-white-50">
@@ -132,5 +112,12 @@
         </p>
       </footer>
     </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
