@@ -1,6 +1,9 @@
 <%# parameter: service %>
 
-<div class="card h-100 col">
+<div
+  class="card h-100 col"
+  onclick="location.href='<% service[`상세조회URL`] %>'"
+>
   <div class="card-header text-dark">
     <%= `${service['부서명']}, ${service['소관기관명']}` %>
   </div>
