@@ -35,7 +35,6 @@ app.get("/result", (req, res) => {
     })
     .then((json) => {
       const data = json.data;
-      console.log(json);
 
       for (let i = 0; i < data.length; ++i) {
         serviceList.push(data[i]);
