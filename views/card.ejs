@@ -1,9 +1,6 @@
-<%# parameter: service %> <%# DEBUG %> <% console.log(service['상세조회URL']) %>
+<%# parameter: service %>
 
-<div
-  class="card h-100 col"
-  onclick="location.href='<%- service[`상세조회URL`] %>'"
->
+<div class="card h-100 col">
   <div class="card-header text-dark">
     <%= `${service['부서명']}, ${service['소관기관명']}` %>
   </div>
@@ -11,6 +8,7 @@
   <div class="card-body text-dark">
     <h5 class="card-title"><%= service['서비스명'] %></h5>
     <p class="card-text"><%= service['서비스목적'] %></p>
+    <a href=<%= service['상세조회URL'] %> class="stretched-link"> </a> 
   </div>
 
   <div class="card-footer">

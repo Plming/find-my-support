@@ -37,6 +37,12 @@ app.get("/result", (req, res) => {
       const data = json.data;
 
       for (let i = 0; i < data.length; ++i) {
+        // HACK: manipulate url
+        data[i]["상세조회URL"] = data[i]["상세조회URL"].replace(
+          "//gov.kr",
+          "//www.gov.kr"
+        );
+
         serviceList.push(data[i]);
 
         ++count;
