@@ -1,0 +1,328 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1",
+    "title": "대한민국 공공서비스 정보",
+    "description": "정부24 대한민국 공공서비스 정보 제공 서비스"
+  },
+  "host": "api.odcloud.kr",
+  "basePath": "/api",
+  "schemes": ["https", "http"],
+  "securityDefinitions": {
+    "ApiKeyAuth": { "type": "apiKey", "in": "header", "name": "Authorization" },
+    "ApiKeyAuth2": { "type": "apiKey", "in": "query", "name": "serviceKey" }
+  },
+  "paths": {
+    "/gov24/v1/serviceList": {
+      "get": {
+        "tags": ["API 목록"],
+        "summary": "",
+        "operationId": "GETserviceList",
+        "description": "정부24에서 제공하는 공공서비스 목록입니다.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page index",
+            "type": "integer",
+            "format": "int64",
+            "exclusiveMinimum": false,
+            "default": 1
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "page size",
+            "type": "integer",
+            "format": "int64",
+            "exclusiveMinimum": false,
+            "default": 10
+          },
+          {
+            "name": "returnType",
+            "in": "query",
+            "description": "응답의 데이터 타입을 선택할 수 있습니다. (기본값: JSON)<br/>XML형태의 응답결과를 얻기 위해서는 XML 값으로 설정",
+            "type": "string",
+            "exclusiveMinimum": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 수행 됨",
+            "schema": { "$ref": "#/definitions/serviceList_api" }
+          },
+          "401": { "description": "인증 정보가 정확 하지 않음" },
+          "500": { "description": "API 서버에 문제가 발생하였음" }
+        },
+        "security": [{ "ApiKeyAuth": [] }, { "ApiKeyAuth2": [] }]
+      }
+    },
+    "/gov24/v1/serviceDetail": {
+      "get": {
+        "tags": ["API 목록"],
+        "summary": "",
+        "operationId": "GETserviceDetail",
+        "description": "정부24에서 제공하는 개별 공공서비스의 상세한 내용입니다.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page index",
+            "type": "integer",
+            "format": "int64",
+            "exclusiveMinimum": false,
+            "default": 1
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "page size",
+            "type": "integer",
+            "format": "int64",
+            "exclusiveMinimum": false,
+            "default": 10
+          },
+          {
+            "name": "returnType",
+            "in": "query",
+            "description": "응답의 데이터 타입을 선택할 수 있습니다. (기본값: JSON)<br/>XML형태의 응답결과를 얻기 위해서는 XML 값으로 설정",
+            "type": "string",
+            "exclusiveMinimum": false
+          },
+          {
+            "name": "cond[SVC_ID::EQ]",
+            "in": "query",
+            "description": "공공서비스 고유 식별자",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 수행 됨",
+            "schema": { "$ref": "#/definitions/serviceDetail_api" }
+          },
+          "401": { "description": "인증 정보가 정확 하지 않음" },
+          "500": { "description": "API 서버에 문제가 발생하였음" }
+        },
+        "security": [{ "ApiKeyAuth": [] }, { "ApiKeyAuth2": [] }]
+      }
+    },
+    "/gov24/v1/supportConditions": {
+      "get": {
+        "tags": ["API 목록"],
+        "summary": "",
+        "operationId": "GETsupportConditions",
+        "description": "공공서비스를 받기 위한 지원조건 정보입니다.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page index",
+            "type": "integer",
+            "format": "int64",
+            "exclusiveMinimum": false,
+            "default": 1
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "page size",
+            "type": "integer",
+            "format": "int64",
+            "exclusiveMinimum": false,
+            "default": 10
+          },
+          {
+            "name": "returnType",
+            "in": "query",
+            "description": "응답의 데이터 타입을 선택할 수 있습니다. (기본값: JSON)<br/>XML형태의 응답결과를 얻기 위해서는 XML 값으로 설정",
+            "type": "string",
+            "exclusiveMinimum": false
+          },
+          {
+            "name": "cond[SVC_ID::EQ]",
+            "in": "query",
+            "description": "공공서비스 고유 식별자",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 수행 됨",
+            "schema": { "$ref": "#/definitions/supportConditions_api" }
+          },
+          "401": { "description": "인증 정보가 정확 하지 않음" },
+          "500": { "description": "API 서버에 문제가 발생하였음" }
+        },
+        "security": [{ "ApiKeyAuth": [] }, { "ApiKeyAuth2": [] }]
+      }
+    }
+  },
+  "definitions": {
+    "serviceList_model": {
+      "type": "object",
+      "properties": {
+        "서비스ID": {
+          "type": "string",
+          "description": "공공서비스 고유 식별자"
+        },
+        "지원유형": {
+          "type": "string",
+          "description": "현금, 현물, 이용권, 서비스 등 지원 형태"
+        },
+        "서비스명": { "type": "string", "description": "공공서비스 명칭" },
+        "서비스목적": { "type": "string", "description": "공공서비스 목적" },
+        "지원대상": { "type": "string", "description": "공공서비스 지원대상" },
+        "선정기준": { "type": "string", "description": "지원대상 선정기준" },
+        "지원내용": { "type": "string", "description": "공공서비스 지원내용" },
+        "신청방법": { "type": "string", "description": "공공서비스 신청방법" },
+        "신청기한": { "type": "string", "description": "공공서비스 신청기한" },
+        "상세조회URL": {
+          "type": "string",
+          "description": "정부24 공공서비스 안내 페이지 URL"
+        },
+        "소관기관코드": {
+          "type": "string",
+          "description": "공공서비스 소관기관 행정표준코드"
+        },
+        "소관기관명": {
+          "type": "string",
+          "description": "공공서비스 소관기관 명칭"
+        },
+        "부서명": {
+          "type": "string",
+          "description": "공공서비스 소관기관의 부서 명칭"
+        },
+        "조회수": {
+          "type": "integer",
+          "description": "정부24 공공서비스 안내 페이지 조회수"
+        }
+      }
+    },
+    "serviceList_api": {
+      "type": "object",
+      "properties": {
+        "page": { "type": "integer", "format": "int64" },
+        "perPage": { "type": "integer", "format": "int64" },
+        "totalCount": { "type": "integer", "format": "int64" },
+        "currentCount": { "type": "integer", "format": "int64" },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/serviceList_model" }
+        }
+      }
+    },
+    "serviceDetail_model": {
+      "type": "object",
+      "properties": {
+        "SVC_ID": { "type": "string", "description": "공공서비스 고유 식별자" },
+        "지원유형": { "type": "string", "description": "" },
+        "서비스명": { "type": "string", "description": "" },
+        "서비스목적": { "type": "string", "description": "" },
+        "신청기한": { "type": "string", "description": "" },
+        "지원대상": { "type": "string", "description": "" },
+        "선정기준": { "type": "string", "description": "" },
+        "지원내용": { "type": "string", "description": "" },
+        "신청방법": { "type": "string", "description": "" },
+        "구비서류": { "type": "string", "description": "" },
+        "접수기관명": { "type": "string", "description": "" },
+        "문의처전화번호": { "type": "string", "description": "" },
+        "온라인신청사이트URL": { "type": "string", "description": "" },
+        "수정일시": { "type": "string", "description": "" },
+        "소관기관명": { "type": "string", "description": "" },
+        "행정규칙": { "type": "string", "description": "" },
+        "자치법규": { "type": "string", "description": "" },
+        "법령": { "type": "string", "description": "" }
+      }
+    },
+    "serviceDetail_api": {
+      "type": "object",
+      "properties": {
+        "page": { "type": "integer", "format": "int64" },
+        "perPage": { "type": "integer", "format": "int64" },
+        "totalCount": { "type": "integer", "format": "int64" },
+        "currentCount": { "type": "integer", "format": "int64" },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/serviceDetail_model" }
+        }
+      }
+    },
+    "supportConditions_model": {
+      "type": "object",
+      "properties": {
+        "SVC_ID": { "type": "string", "description": "공공서비스 고유 식별자" },
+        "JA0101": { "type": "string", "description": "남성" },
+        "JA0102": { "type": "string", "description": "여성" },
+        "JA0103": { "type": "string", "description": "영유아(0~5)" },
+        "JA0104": { "type": "string", "description": "아동(6~12)" },
+        "JA0105": { "type": "string", "description": "청소년(13~18)" },
+        "JA0106": { "type": "string", "description": "청년(19~29)" },
+        "JA0107": { "type": "string", "description": "중년(30~49)" },
+        "JA0108": { "type": "string", "description": "장년(50~64)" },
+        "JA0109": { "type": "string", "description": "노년기(65~)" },
+        "JA0110": { "type": "string", "description": "대상연령(시작)" },
+        "JA0111": { "type": "string", "description": "대상연령(종료)" },
+        "JA0201": { "type": "string", "description": "0 ~ 50" },
+        "JA0202": { "type": "string", "description": "51 ~ 75" },
+        "JA0203": { "type": "string", "description": "76 ~ 100" },
+        "JA0204": { "type": "string", "description": "101 ~ 200" },
+        "JA0205": { "type": "string", "description": "200% 초과" },
+        "JA0301": { "type": "string", "description": "예비부모/난임" },
+        "JA0302": { "type": "string", "description": "임신부" },
+        "JA0303": { "type": "string", "description": "출산/입양" },
+        "JA0304": { "type": "string", "description": "심한 장애" },
+        "JA0305": { "type": "string", "description": "심하지 않은 장애" },
+        "JA0306": { "type": "string", "description": "독립유공자" },
+        "JA0307": { "type": "string", "description": "국가유공자" },
+        "JA0308": { "type": "string", "description": "참전유공자" },
+        "JA0309": { "type": "string", "description": "보훈보상대상자" },
+        "JA0310": { "type": "string", "description": "특수임무유공자" },
+        "JA0311": { "type": "string", "description": "5·18민주유공자" },
+        "JA0312": { "type": "string", "description": "제대군인" },
+        "JA0313": { "type": "string", "description": "농업인" },
+        "JA0314": { "type": "string", "description": "어업인" },
+        "JA0315": { "type": "string", "description": "축산업인" },
+        "JA0316": { "type": "string", "description": "임업인" },
+        "JA0317": { "type": "string", "description": "초등학생" },
+        "JA0318": { "type": "string", "description": "중학생" },
+        "JA0319": { "type": "string", "description": "고등학생" },
+        "JA0320": { "type": "string", "description": "대학생/대학원생" },
+        "JA0322": { "type": "string", "description": "해당사항없음" },
+        "JA0323": { "type": "string", "description": "질병/부상/질환자" },
+        "JA0324": { "type": "string", "description": "중증·난치·희귀질환자" },
+        "JA0325": { "type": "string", "description": "요양환자/치매환자" },
+        "JA0326": { "type": "string", "description": "근로자/직장인" },
+        "JA0327": { "type": "string", "description": "구직자/실업자" },
+        "JA0401": { "type": "string", "description": "다문화가족" },
+        "JA0402": { "type": "string", "description": "북한이탈주민" },
+        "JA0403": { "type": "string", "description": "한부모가정/조손가정" },
+        "JA0404": { "type": "string", "description": "1인가구" },
+        "JA0410": { "type": "string", "description": "해당사항없음" },
+        "JA0411": { "type": "string", "description": "다자녀가구" },
+        "JA0412": { "type": "string", "description": "무주택세대" },
+        "JA0413": { "type": "string", "description": "신규전입" },
+        "JA0414": { "type": "string", "description": "확대가족" }
+      }
+    },
+    "supportConditions_api": {
+      "type": "object",
+      "properties": {
+        "page": { "type": "integer", "format": "int64" },
+        "perPage": { "type": "integer", "format": "int64" },
+        "totalCount": { "type": "integer", "format": "int64" },
+        "currentCount": { "type": "integer", "format": "int64" },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/supportConditions_model" }
+        }
+      }
+    }
+  }
+}

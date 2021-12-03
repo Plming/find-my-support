@@ -1,8 +1,6 @@
 "use strict";
 
-// load API_AUTH_KEY in local
-require("dotenv").config();
-
+require("dotenv").config(); // load API_AUTH_KEY in local
 const assert = require("assert");
 const express = require("express");
 const path = require("path");
@@ -10,56 +8,48 @@ const fetch = require("node-fetch");
 
 const app = express();
 const port = process.env.PORT ?? 3000;
+const base = "https://api.odcloud.kr/api/gov24/v1/";
 const API_AUTH_KEY = process.env.API_AUTH_KEY;
 const htmlPath = path.resolve(__dirname, "views");
 
-const base = "https://api.odcloud.kr/api/gov24/v1";
-const target = `${base}/serviceList?page=1&perPage=10&serviceKey=${API_AUTH_KEY}`;
-
 app.set("views", "views");
 app.set("view engine", "ejs");
-
-app.use("/js", express.static("js"));
 
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(htmlPath, "index.html"));
 });
 
-app.get("/result", (req, res) => {
-  let count = 0;
-  let serviceList = [];
+app.get("/result", async (req, res) => {
+  const url = new URL("serviceList", base);
+  url.search = new URLSearchParams({
+    page: 1,
+    perPage: 10,
+    serviceKey: API_AUTH_KEY,
+  });
 
-  fetch(target)
-    .then((response) => {
-      return response.json();
-    })
-    .then((json) => {
-      const data = json.data;
+  const data = await fetchFromApi(url.toString());
 
-      for (let i = 0; i < data.length; ++i) {
-        // HACK: manipulate url
-        data[i]["상세조회URL"] = data[i]["상세조회URL"].replace(
-          "//gov.kr",
-          "//www.gov.kr"
-        );
+  let listToShow = [];
+  for (let i = 0; i < data.length; ++i) {
+    if (!(await canServiced(req.query, data[i]["서비스ID"]))) {
+      continue;
+    }
 
-        serviceList.push(data[i]);
+    // HACK: manipulate url
+    data[i]["상세조회URL"] = data[i]["상세조회URL"].replace(
+      "//gov.kr",
+      "//www.gov.kr"
+    );
 
-        ++count;
-        if (count > 4) {
-          res.render("result", { serviceList: serviceList });
-          return;
-        }
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    listToShow.push(data[i]);
 
-  /*
-  let data = req.query;
-  console.log(`${req.query.toString()}: ${req.query.name}`);
-  */
+    // TODO: in development
+    if (listToShow.length >= 4) {
+      break;
+    }
+  }
+
+  res.render("result", { serviceList: listToShow });
 });
 
 app.listen(port, () => {
@@ -67,3 +57,41 @@ app.listen(port, () => {
 
   console.log(`Express app listening at port ${port}`);
 });
+
+async function fetchFromApi(url) {
+  const response = await fetch(url);
+  const jsonOut = await response.json();
+
+  assert(response.status === 200, jsonOut.msg);
+
+  return jsonOut.data;
+}
+
+async function canServiced(conditionQuery, serviceId) {
+  const url = new URL("supportConditions", base);
+  url.search = new URLSearchParams({
+    "cond[SVC_ID::EQ]": serviceId,
+    serviceKey: API_AUTH_KEY,
+  });
+
+  const data = await fetchFromApi(url.toString());
+
+  const conditions = data[0];
+
+  // TODO: there's a service list that no support conditions provided
+  if (conditions === undefined) {
+    return true;
+  }
+
+  for (const [_, value] of Object.entries(conditionQuery)) {
+    if (value === "") {
+      continue;
+    }
+
+    if (conditions[value] !== "Y") {
+      return false;
+    }
+  }
+
+  return true;
+}

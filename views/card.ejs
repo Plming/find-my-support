@@ -1,5 +1,11 @@
 <%# parameter: service %>
 
+<%
+const MAX_LENGTH = 100;
+service['서비스목적'] = service['서비스목적'].substring(0, MAX_LENGTH);
+service['신청방법'] = service['신청방법'].substring(0,MAX_LENGTH);
+%>
+
 <div class="card h-100 col">
   <div class="card-header text-dark">
     <%= `${service['부서명']}, ${service['소관기관명']}` %>
