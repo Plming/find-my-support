@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "dev": "nodemon -w *.* -e html,js,ejs app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,7 +22,8 @@
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.6"
+    "node-fetch": "^2.6.6",
+    "nodemon": "^2.0.15"
   },
   "engines": {
     "node": "16.6.1"

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <%- include("./partial/common") %>
+        <title>내 정보 입력</title>
+</head>
+
+<body>
+    <%- include("./partial/navbar") %>
+
+        <form action="/result" method="get">
+            <div class="container">
+                <div class="accordion" id="formAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne">
+                                1. 성별, 나이, 소득구간
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <input type="radio" class="btn-check" id="male" name="gender" value="JA0101" />
+                                    <label class="btn btn-secondary col mx-3" for="male">남성</label>
+
+                                    <input type="radio" class="btn-check" id="female" name="gender" value="JA0102" />
+                                    <label class="btn btn-secondary col mx-3" for="female">여성</label>
+                                </div>
+
+                                <div class="row pt-3">
+                                    <div class="col">
+                                        <select class="form-select" name="age" id="age-select">
+                                            <option value="">나이를 선택해주세요</option>
+                                            <option value="JA0103">영유아(0세~5세)</option>
+                                            <option value="JA0104">아동(6세~12세)</option>
+                                            <option value="JA0105">청소년(13세~18세)</option>
+                                            <option value="JA0106">청년(19세~29세)</option>
+                                            <option value="JA0107">중년(30세~49세)</option>
+                                            <option value="JA0108">장년(50세~64세)</option>
+                                            <option value="JA0109">노년(65세~)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row pt-3">
+                                    <div class="col">
+                                        <select name="income" class="form-select" id="income-select">
+                                            <option value="">소득구간을 선택해주세요</option>
+                                            <option value="JA0201">기준중위소득 0% ~ 50%</option>
+                                            <option value="JA0202">기준중위소득 51% ~ 75%</option>
+                                            <option value="JA0203">기준중위소득 76% ~ 100%</option>
+                                            <option value="JA0204">기준중위소득 101% ~ 200%</option>
+                                            <option value="JA0205">기준중위소득 200% 초과</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo">
+                                2. 개인 특성
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row gy-3">
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0301" name="JA0301" />
+                                        <label class="btn btn-secondary w-100" for="JA0301">난임</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0302" name="JA0302" />
+                                        <label class="btn btn-secondary w-100" for="JA0302">임신부</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0303" name="JA0303" />
+                                        <label class="btn btn-secondary w-100" for="JA0303">출산후</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0304" name="JA0304" />
+                                        <label class="btn btn-secondary w-100" for="JA0304">심한 장애</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0305" name="JA0305" />
+                                        <label class="btn btn-secondary w-100" for="JA0305">심하지 않은 장애</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0306" name="JA0306" />
+                                        <label class="btn btn-secondary w-100" for="JA0306">국가유공자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0307" name="JA0307" />
+                                        <label class="btn btn-secondary w-100" for="JA0307">제대군인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0308" name="JA0308" />
+                                        <label class="btn btn-secondary w-100" for="JA0308">경관농업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0309" name="JA0309" />
+                                        <label class="btn btn-secondary w-100" for="JA0309">경종농업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0310" name="JA0310" />
+                                        <label class="btn btn-secondary w-100" for="JA0310">과수농업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0311" name="JA0311" />
+                                        <label class="btn btn-secondary w-100" for="JA0311">원예·특용농업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0312" name="JA0312" />
+                                        <label class="btn btn-secondary w-100" for="JA0312">농지소유자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0313" name="JA0313" />
+                                        <label class="btn btn-secondary w-100" for="JA0313">기타 농업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0314" name="JA0314" />
+                                        <label class="btn btn-secondary w-100" for="JA0314">연근해/구획어업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0315" name="JA0315" />
+                                        <label class="btn btn-secondary w-100" for="JA0315">양식업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0316" name="JA0316" />
+                                        <label class="btn btn-secondary w-100" for="JA0316">어선소유자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0317" name="JA0317" />
+                                        <label class="btn btn-secondary w-100" for="JA0317">기타 어업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0318" name="JA0318" />
+                                        <label class="btn btn-secondary w-100" for="JA0318">축산업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0319" name="JA0319" />
+                                        <label class="btn btn-secondary w-100" for="JA0319">임업인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0320" name="JA0320" />
+                                        <label class="btn btn-secondary w-100" for="JA0320">초중고학생</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0321" name="JA0321" />
+                                        <label class="btn btn-secondary w-100" for="JA0321">대학/대학원생</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0405" name="JA0405" />
+                                        <label class="btn btn-secondary w-100" for="JA0405">질병/부상/질환자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0406" name="JA0406" />
+                                        <label class="btn btn-secondary w-100" for="JA0406">중증·난치·희귀질환자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0407" name="JA0407" />
+                                        <label class="btn btn-secondary w-100" for="JA0407">요양, 치매환자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0408" name="JA0408" />
+                                        <label class="btn btn-secondary w-100" for="JA0408">근로자/직장인</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0409" name="JA0409" />
+                                        <label class="btn btn-secondary w-100" for="JA0409">구직자/실업자</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0322" name="JA0322" />
+                                        <label class="btn btn-secondary w-100" for="JA0322">해당사항없음</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree">
+                                3. 가구 특성
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row gy-3">
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0401" name="JA0401" />
+                                        <label class="btn btn-secondary w-100" for="JA0401">다문화가족</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0402" name="JA0402" />
+                                        <label class="btn btn-secondary w-100" for="JA0402">북한이탈주민</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0403" name="JA0403" />
+                                        <label class="btn btn-secondary w-100" for="JA0403">한부모가정/조손가정</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0404" name="JA0404" />
+                                        <label class="btn btn-secondary w-100" for="JA0404">1인가구</label>
+                                    </div>
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0411" name="JA0411" />
+                                        <label class="btn btn-secondary w-100" for="JA0411">다자녀가구</label>
+                                    </div>
+
+                                    <div class="col-md-3 px-3">
+                                        <input type="checkbox" class="btn-check" id="JA0410" name="JA0410" />
+                                        <label class="btn btn-secondary w-100" for="JA0410">해당사항없음</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">
+                    나의 혜택 확인하기
+                </button>
+            </div>
+        </form>
+
+        <%- include("./partial/footer") %>
+</body>
+
+</html>

@@ -16,7 +16,11 @@ app.set("views", "views");
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.sendFile(path.resolve(htmlPath, "index.html"));
+  res.render("index");
+});
+
+app.get("/entry", (req, res) => {
+  res.render("entry");
 });
 
 app.get("/result", async (req, res) => {
