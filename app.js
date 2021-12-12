@@ -3,8 +3,9 @@
 require("dotenv").config(); // load API_AUTH_KEY in local
 const assert = require("assert");
 const express = require("express");
-const path = require("path");
 const fetch = require("node-fetch");
+
+const isAvailable = require("./src/isAvailable");
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -25,42 +26,46 @@ app.get("/entry", (req, res) => {
 });
 
 app.get("/result", async (req, res) => {
-  let result = [];
+  const availableServices = [];
   let currentPage = 0;
+  let url;
 
-  while (result.length < 10) {
-    const url = new URL("serviceList", base);
+  url = new URL("supportConditions", base);
+  while (true) {
     url.search = new URLSearchParams({
       page: currentPage,
       perPage: 10,
       serviceKey: API_AUTH_KEY,
     });
 
-    let body = await fetchFromApi(url.toString());
-    console.log(currentPage + " called");
+    const body = await fetch(url.toString()).then((res) => res.json());
     if (body.currentCount === 0) {
       break;
     }
 
-    let list = body.data;
-    for (let i = 0; i < list.length; ++i) {
-      if (!(await canServiced(req.query, list[i]["서비스ID"]))) {
-        continue;
+    const conditions = body.data;
+    for (const c of conditions) {
+      if (isAvailable(req.query, c)) {
+        availableServices.push(c["SVC_ID"]);
       }
-
-      // HACK: manipulate url
-      list[i]["상세조회URL"] = list[i]["상세조회URL"].replace(
-        "//gov.kr",
-        "//www.gov.kr"
-      );
-
-      result.push(list[i]);
     }
 
     ++currentPage;
   }
 
-  res.render("result", { serviceList: result });
+  const details = [];
+  url = new URL("serviceDetail", base);
+  for (const s of availableServices) {
+    url.search = new URLSearchParams({
+      "cond[SVC_ID::EQ]": s,
+      serviceKey: API_AUTH_KEY,
+    });
+
+    const body = await fetch(url.toString()).then((res) => res.json());
+    details.push(body.data[0]);
+  }
+
+  res.render("result", { serviceList: details });
 });
 
 app.listen(port, () => {
@@ -68,41 +73,3 @@ app.listen(port, () => {
 
   console.log(`Express app listening at port ${port}`);
 });
-
-async function fetchFromApi(url) {
-  const response = await fetch(url);
-  const result = await response.json();
-
-  // assert(response.status === 200, jsonOut.msg);
-
-  return result;
-}
-
-async function canServiced(conditionQuery, serviceId) {
-  const url = new URL("supportConditions", base);
-  url.search = new URLSearchParams({
-    "cond[SVC_ID::EQ]": serviceId,
-    page: 1,
-    perPage: 1,
-    serviceKey: API_AUTH_KEY,
-  });
-
-  const body = await fetchFromApi(url.toString());
-  // TODO: there's a service list that no support conditions provided
-  if (body.currentCount === 0) {
-    return true;
-  }
-
-  const conditions = body.data[0];
-  for (const [_, value] of Object.entries(conditionQuery)) {
-    if (value === "") {
-      continue;
-    }
-
-    if (conditions[value] !== "Y") {
-      return false;
-    }
-  }
-
-  return true;
-}

@@ -10,7 +10,14 @@
   <%- include("./partial/navbar") %>
 
     <div class="container">
-      <div class="lead">총 <%= serviceList.length %>개의 혜택을 찾았습니다.</div>
+      <div class="lead">
+        총 <%= serviceList.length %>개의 혜택을 찾았습니다.
+      </div>
+      <div class="text-muted">
+        카드를 클릭하면 신청 페이지로 이동합니다.
+      </div>
+      
+      <hr>
 
       <div class="row pt-5 gy-3">
         <% for(let i=0; i < serviceList.length; ++i) { %>
