@@ -6,6 +6,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 
 const isAvailable = require("./src/isAvailable");
+const cache = require("./src/cache");
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -27,34 +28,16 @@ app.get("/entry", (req, res) => {
 
 app.get("/result", async (req, res) => {
   const availableServices = [];
-  let currentPage = 0;
-  let url;
 
-  url = new URL("supportConditions", base);
-  while (true) {
-    url.search = new URLSearchParams({
-      page: currentPage,
-      perPage: 10,
-      serviceKey: API_AUTH_KEY,
-    });
-
-    const body = await fetch(url.toString()).then((res) => res.json());
-    if (body.currentCount === 0) {
-      break;
+  const conditions = cache.getSupportConditions();
+  for (const c of conditions) {
+    if (isAvailable(req.query, c)) {
+      availableServices.push(c["SVC_ID"]);
     }
-
-    const conditions = body.data;
-    for (const c of conditions) {
-      if (isAvailable(req.query, c)) {
-        availableServices.push(c["SVC_ID"]);
-      }
-    }
-
-    ++currentPage;
   }
 
   const details = [];
-  url = new URL("serviceDetail", base);
+  const url = new URL("serviceDetail", base);
   for (const s of availableServices) {
     url.search = new URLSearchParams({
       "cond[SVC_ID::EQ]": s,
@@ -70,6 +53,5 @@ app.get("/result", async (req, res) => {
 
 app.listen(port, () => {
   assert(API_AUTH_KEY !== undefined, "there's no api key.");
-
   console.log(`Express app listening at port ${port}`);
 });
