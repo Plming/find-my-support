@@ -1,14 +1,8 @@
 "use strict";
 
-const assert = require("assert");
-
 function isAvailable(conditionQuery, conditions) {
-  assert(conditionQuery.hasOwnProperty("gender"));
-  assert(conditionQuery.hasOwnProperty("age"));
-  assert(conditionQuery.hasOwnProperty("income"));
-
-  // TODO: add birthday selector in view
-  conditionQuery.age = 21;
+  const birthdate = new Date(conditionQuery.birthday);
+  conditionQuery.age = new Date().getFullYear() - birthdate.getFullYear() + 1;
 
   //#region checkGender
   if (conditions[conditionQuery["gender"]] !== "Y") {
@@ -35,8 +29,9 @@ function isAvailable(conditionQuery, conditions) {
   //#region checkPersonalAttributes
   // JA03XX is personal attribute
   {
-    const myPersonalAttributes = Object.keys(conditionQuery)
-      .filter((v) => v.startsWith("JA03"));
+    const myPersonalAttributes = Object.keys(conditionQuery).filter((v) =>
+      v.startsWith("JA03")
+    );
     const intersectedAttributes = myPersonalAttributes.filter(
       (a) => conditions[a] === "Y"
     );
@@ -49,8 +44,9 @@ function isAvailable(conditionQuery, conditions) {
   //#region checkFamilyAttributes
   // JA04XX is family attribute
   {
-    const myFamilyAttributes = Object.keys(conditionQuery)
-      .filter((v) => v.startsWith("JA04"));
+    const myFamilyAttributes = Object.keys(conditionQuery).filter((v) =>
+      v.startsWith("JA04")
+    );
     const intersectedAttributes = myFamilyAttributes.filter(
       (a) => conditions[a] === "Y"
     );
