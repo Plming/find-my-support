@@ -3,11 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const fetch = require("node-fetch");
 
-const supportConditionsPath = path.resolve(
-  __dirname,
-  "../cache/supportConditions.json"
-);
-
 const cacheDirectory = path.resolve(__dirname, "../cache");
 
 let supportConditions = JSON.parse(
