@@ -3,13 +3,37 @@
 
 <head>
     <%- include("./partial/common") %>
+
+        <script>
+            function isFormValid() {
+                if (document.querySelector("#birthday").value === ""
+                    || document.querySelector("#income").value === "") {
+                    return false;
+                }
+
+                return true;
+            }
+
+            function onSubmit() {
+                if (!isFormValid()) {
+                    return;
+                }
+
+                const spinner = document.createElement("span");
+                spinner.classList.add("spinner-border", "spinner-border-sm");
+
+                const submitButton = document.querySelector("#submit");
+                submitButton.disabled = true;
+                submitButton.appendChild(spinner);
+            }
+        </script>
         <title>내 정보 입력</title>
 </head>
 
 <body>
     <%- include("./partial/navbar") %>
 
-        <form action="/result" method="get">
+        <form action="/result" method="get" onsubmit="onSubmit()">
             <div class="container">
                 <div class="accordion" id="formAccordion">
                     <div class="accordion-item">
@@ -37,7 +61,7 @@
                                             max="<%= new Date().toISOString().split('T')[0] %>" required>
                                     </div>
                                     <div class="col mx-3">
-                                        <select name="income" class="form-select" required>
+                                        <select class="form-select" name="income" id="income" required>
                                             <option value="">소득구간을 선택해주세요</option>
                                             <option value="JA0201">기준중위소득 0% ~ 50%</option>
                                             <option value="JA0202">기준중위소득 51% ~ 75%</option>
@@ -254,7 +278,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 mt-3">
+                <button type="submit" class="btn btn-primary w-100 mt-3" id="submit">
                     나의 혜택 확인하기
                 </button>
             </div>
