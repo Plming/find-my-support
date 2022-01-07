@@ -5,27 +5,7 @@
     <%- include("./partial/common") %>
 
         <script>
-            function isFormValid() {
-                if (document.querySelector("#birthday").value === ""
-                    || document.querySelector("#income").value === "") {
-                    return false;
-                }
-
-                return true;
-            }
-
-            function onSubmit() {
-                if (!isFormValid()) {
-                    return;
-                }
-
-                const spinner = document.createElement("span");
-                spinner.classList.add("spinner-border", "spinner-border-sm");
-
-                const submitButton = document.querySelector("#submit");
-                submitButton.disabled = true;
-                submitButton.appendChild(spinner);
-            }
+            // import entry.js
         </script>
         <title>내 정보 입력</title>
 </head>
@@ -56,8 +36,8 @@
 
                                 <div class="row pt-3">
                                     <div class="col mx-3">
-                                        <label for="birthday">생일을 입력해주세요</label>
-                                        <input type="date" class="w-75" name="birthday" id="birthday"
+                                        <label for="birthdate">생일을 입력해주세요</label>
+                                        <input type="date" class="w-75" name="birthdate" id="birthdate"
                                             max="<%= new Date().toISOString().split('T')[0] %>" required>
                                     </div>
                                     <div class="col mx-3">

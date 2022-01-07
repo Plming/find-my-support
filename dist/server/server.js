@@ -1,3 +1,4 @@
+//@ts-check
 "use strict";
 
 require("dotenv").config(); // load API_AUTH_KEY in local
@@ -5,8 +6,8 @@ const assert = require("assert");
 const express = require("express");
 const fetch = require("node-fetch");
 
-const isAvailable = require("./src/isAvailable");
-const cache = require("./src/cache");
+const isAvailable = require("./isAvailable");
+const Cache = require("./Cache").default;
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -29,7 +30,8 @@ app.get("/entry", (req, res) => {
 app.get("/result", async (req, res) => {
   const availableServices = [];
 
-  const conditions = cache.getSupportConditions();
+  const conditions = await Cache.getSupportConditions();
+
   for (const c of conditions) {
     if (isAvailable(req.query, c)) {
       availableServices.push(c["SVC_ID"]);
@@ -39,11 +41,12 @@ app.get("/result", async (req, res) => {
   const details = [];
   const url = new URL("serviceDetail", base);
   for (const s of availableServices) {
-    url.search = new URLSearchParams({
+    url.search = (new URLSearchParams({
       "cond[SVC_ID::EQ]": s,
       serviceKey: API_AUTH_KEY,
-    });
+    })).toString();
 
+    // @ts-ignore
     const body = await fetch(url.toString()).then((res) => res.json());
     details.push(body.data[0]);
   }

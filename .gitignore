@@ -1,6 +1,9 @@
 # for using heroku cache
 /node_modules 
 
+# open api cache file
+/cache
+
 npm-debug.log
 .DS_Store
 /*.env
