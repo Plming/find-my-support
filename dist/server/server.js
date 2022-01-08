@@ -39,16 +39,12 @@ app.get("/result", async (req, res) => {
   }
 
   const details = [];
-  const url = new URL("serviceDetail", base);
   for (const s of availableServices) {
-    url.search = (new URLSearchParams({
-      "cond[SVC_ID::EQ]": s,
-      serviceKey: API_AUTH_KEY,
-    })).toString();
-
-    // @ts-ignore
-    const body = await fetch(url.toString()).then((res) => res.json());
-    details.push(body.data[0]);
+    const item = await Cache.getServiceDetail(s);
+    if(item !== undefined) {
+      details.push(item);
+      console.log(JSON.stringify(item));
+    }
   }
 
   res.render("result", { serviceList: details });

@@ -17,11 +17,11 @@ require("dotenv").config();
 class Cache {
     static getSupportConditions() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (Cache.cached === null) {
+            if (Cache.supportConditionCache === null) {
                 yield this.refreshSupportConditions();
             }
             else {
-                const lastCachedAt = Cache.cached.createdAt;
+                const lastCachedAt = Cache.supportConditionCache.createdAt;
                 const diff = new Date().getTime() - lastCachedAt.getTime();
                 // 1 day in milliseconds
                 const diffToRefresh = 1000 * 60 * 60 * 24;
@@ -29,13 +29,17 @@ class Cache {
                     this.refreshSupportConditions();
                 }
             }
-            return Cache.cached.data;
+            return Cache.supportConditionCache.data;
         });
     }
-    /**
-     * supportCondition의 캐시를 다시 로딩합니다.
-     * 다시 가져온 캐시는 파일에도 저장됩니다.
-     */
+    static getServiceDetail(SVC_ID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (Cache.serviceDetailCache === null) {
+                yield this.refreshServiceDetail();
+            }
+            return Cache.serviceDetailCache.data[SVC_ID];
+        });
+    }
     static refreshSupportConditions() {
         return __awaiter(this, void 0, void 0, function* () {
             const url = new URL("gov24/v1/supportConditions", Cache.BASE_URL);
@@ -44,13 +48,32 @@ class Cache {
             params.append("serviceKey", process.env.API_AUTH_KEY);
             url.search = params.toString();
             const body = yield (0, node_fetch_1.default)(url).then((res) => res.json());
-            Cache.cached = {
+            Cache.supportConditionCache = {
                 createdAt: new Date(),
                 data: body.data
+            };
+        });
+    }
+    static refreshServiceDetail() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = new URL("gov24/v1/serviceDetail", Cache.BASE_URL);
+            const params = new URLSearchParams();
+            params.append("perPage", "0");
+            params.append("serviceKey", process.env.API_AUTH_KEY);
+            url.search = params.toString();
+            const body = yield (0, node_fetch_1.default)(url).then((res) => res.json());
+            const result = {};
+            for (const s of body.data) {
+                result[s.SVC_ID] = s;
+            }
+            Cache.serviceDetailCache = {
+                createdAt: new Date(),
+                data: result
             };
         });
     }
 }
 exports.default = Cache;
 Cache.BASE_URL = "https://api.odcloud.kr/api/";
-Cache.cached = null;
+Cache.supportConditionCache = null;
+Cache.serviceDetailCache = null;
