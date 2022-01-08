@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -31,37 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = __importStar(require("fs"));
-const path_1 = __importDefault(require("path"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 require("dotenv").config();
 class Cache {
     static getSupportConditions() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            // load from file if never loaded
             if (Cache.cached === null) {
-                try {
-                    const text = fs.readFileSync(Cache.CACHE_PATH).toString();
-                    Cache.cached = JSON.parse(text);
-                }
-                catch (_b) {
-                    // 파일이 없는 경우
-                    yield this.refreshSupportConditions();
-                }
-                finally {
-                    if (Cache.cached === null) {
-                        throw "df";
-                    }
-                    return (_a = Cache.cached) === null || _a === void 0 ? void 0 : _a.data;
-                }
+                yield this.refreshSupportConditions();
             }
-            const lastCachedAt = Cache.cached.createdAt;
-            const diff = new Date().getTime() - lastCachedAt.getTime();
-            // 1 day in milliseconds
-            const diffToRefresh = 1000 * 60 * 60 * 24;
-            if (diff > diffToRefresh) {
-                this.refreshSupportConditions();
+            else {
+                const lastCachedAt = Cache.cached.createdAt;
+                const diff = new Date().getTime() - lastCachedAt.getTime();
+                // 1 day in milliseconds
+                const diffToRefresh = 1000 * 60 * 60 * 24;
+                if (diff > diffToRefresh) {
+                    this.refreshSupportConditions();
+                }
             }
             return Cache.cached.data;
         });
@@ -74,30 +40,17 @@ class Cache {
         return __awaiter(this, void 0, void 0, function* () {
             const url = new URL("gov24/v1/supportConditions", Cache.BASE_URL);
             const params = new URLSearchParams();
-            params.append("perPage", "10");
+            params.append("perPage", "0");
             params.append("serviceKey", process.env.API_AUTH_KEY);
-            let result = [];
-            let currentPage = 1;
-            while (true) {
-                params.set("page", currentPage.toString());
-                url.search = params.toString();
-                const body = yield (0, node_fetch_1.default)(url).then((res) => res.json());
-                // 더 이상 가져올 정보가 없는 경우
-                if (body.currentCount === 0) {
-                    break;
-                }
-                result = result.concat(body.data);
-                ++currentPage;
-            }
+            url.search = params.toString();
+            const body = yield (0, node_fetch_1.default)(url).then((res) => res.json());
             Cache.cached = {
                 createdAt: new Date(),
-                data: result
+                data: body.data
             };
-            fs.writeFileSync(Cache.CACHE_PATH, JSON.stringify(Cache.cached));
         });
     }
 }
 exports.default = Cache;
-Cache.CACHE_PATH = path_1.default.join(__dirname, "../cache", "supportConditions.json");
 Cache.BASE_URL = "https://api.odcloud.kr/api/";
 Cache.cached = null;

@@ -9,40 +9,26 @@ interface SupportConditionCache {
 }
 
 export default class Cache {
-  private static readonly CACHE_PATH = path.join(__dirname, "../cache", "supportConditions.json");
   private static readonly BASE_URL = "https://api.odcloud.kr/api/";
 
   private static cached: SupportConditionCache | null = null;
 
   public static async getSupportConditions(): Promise<supportConditions_model[]> {
-    // load from file if never loaded
     if (Cache.cached === null) {
-      try {
-        const text = fs.readFileSync(Cache.CACHE_PATH).toString();
-        Cache.cached = JSON.parse(text);
-      } catch {
-        // 파일이 없는 경우
-        await this.refreshSupportConditions();
-      } finally {
-        if (Cache.cached === null) {
-          throw "df";
-        }
+      await this.refreshSupportConditions();
+    } else {
+      const lastCachedAt = Cache.cached.createdAt;
+      const diff = new Date().getTime() - lastCachedAt.getTime();
 
-        return Cache.cached?.data;
+      // 1 day in milliseconds
+      const diffToRefresh = 1000 * 60 * 60 * 24;
+
+      if (diff > diffToRefresh) {
+        this.refreshSupportConditions();
       }
     }
 
-    const lastCachedAt = Cache.cached.createdAt;
-    const diff = new Date().getTime() - lastCachedAt.getTime();
-
-    // 1 day in milliseconds
-    const diffToRefresh = 1000 * 60 * 60 * 24;
-
-    if (diff > diffToRefresh) {
-      this.refreshSupportConditions();
-    }
-
-    return Cache.cached.data;
+    return Cache.cached!.data;
   }
 
   /**
@@ -53,29 +39,15 @@ export default class Cache {
     const url = new URL("gov24/v1/supportConditions", Cache.BASE_URL);
 
     const params = new URLSearchParams();
-    params.append("perPage", "10");
+    params.append("perPage", "0");
     params.append("serviceKey", process.env.API_AUTH_KEY!);
+    url.search = params.toString();
 
-    let result: supportConditions_model[] = [];
-    let currentPage = 1;
-    while (true) {
-      params.set("page", currentPage.toString());
-      url.search = params.toString();
-
-      const body: supportConditions_api = await fetch(url).then((res) => res.json());
-      // 더 이상 가져올 정보가 없는 경우
-      if (body.currentCount === 0) {
-        break;
-      }
-
-      result = result.concat(body.data);
-      ++currentPage;
-    }
+    const body: supportConditions_api = await fetch(url).then((res) => res.json());
 
     Cache.cached = {
       createdAt: new Date(),
-      data: result
+      data: body.data
     };
-    fs.writeFileSync(Cache.CACHE_PATH, JSON.stringify(Cache.cached));
   }
 }
