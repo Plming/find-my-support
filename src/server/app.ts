@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import process from "process";
+import path from "path";
 
 import isAvailable from "./isAvailable";
 import Cache from "./cache";
@@ -11,7 +12,8 @@ const app = express();
 const port = process.env.PORT ?? 3000;
 
 // app configs
-app.use("/public", express.static(__dirname + "/public"));
+app.use("/public", express.static(path.join(__dirname, "../../public")));
+app.use("/public", express.static(path.join(__dirname, "../../dist/client")));
 app.set("views", "views");
 app.set("view engine", "ejs");
 

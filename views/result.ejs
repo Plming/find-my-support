@@ -18,9 +18,9 @@
       </div>
 
       <div class="row pt-5 gy-3">
-        <% for(let i=0; i < serviceList.length; ++i) { %>
+        <% for (const item of serviceList) { %>
           <div class="col-md-4 px-3">
-            <%- include('./partial/card', {service: serviceList[i]}) %>
+            <%- include('./partial/card', {service: item}) %>
           </div>
           <% } %>
       </div>

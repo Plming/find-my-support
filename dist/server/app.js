@@ -16,13 +16,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const process_1 = __importDefault(require("process"));
+const path_1 = __importDefault(require("path"));
 const isAvailable_1 = __importDefault(require("./isAvailable"));
 const cache_1 = __importDefault(require("./cache"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = (_a = process_1.default.env.PORT) !== null && _a !== void 0 ? _a : 3000;
 // app configs
-app.use("/public", express_1.default.static(__dirname + "/public"));
+app.use("/public", express_1.default.static(path_1.default.join(__dirname, "../../public")));
+app.use("/public", express_1.default.static(path_1.default.join(__dirname, "../../dist/client")));
 app.set("views", "views");
 app.set("view engine", "ejs");
 // routes

@@ -1,0 +1,12 @@
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.text-truncate {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
