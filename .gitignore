@@ -1,6 +1,9 @@
 # unnecessary because heroku using own cache
 /node_modules 
 
+# typescript compiled output
+/**/*.js
+
 npm-debug.log
 .DS_Store
 /*.env
