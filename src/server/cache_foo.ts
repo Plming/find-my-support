@@ -55,7 +55,7 @@ export default class Cache {
     params.append("serviceKey", process.env.API_AUTH_KEY!);
     url.search = params.toString();
 
-    const body: supportConditions_api = await fetch(url.href).then((res) => res.json()) as supportConditions_api;
+    const body: supportConditions_api = await fetch(url.href).then((res) => res.json());
 
     Cache.supportConditionCache = {
       createdAt: new Date(),
@@ -71,7 +71,7 @@ export default class Cache {
     params.append("serviceKey", process.env.API_AUTH_KEY!);
     url.search = params.toString();
 
-    const body: serviceDetail_api = await fetch(url.href).then((res) => res.json()) as serviceDetail_api;
+    const body: serviceDetail_api = await fetch(url.href).then((res) => res.json());
     const result: { [key: string]: serviceDetail_model } = {};
     for (const s of body.data) {
       result[s.SVC_ID] = s;

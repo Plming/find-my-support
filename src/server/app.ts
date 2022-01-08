@@ -3,7 +3,7 @@ import express from "express";
 import process from "process";
 
 import isAvailable from "./isAvailable";
-import Cache from "./cache";
+import Cache from "./cache_foo";
 
 dotenv.config();
 
@@ -36,7 +36,6 @@ app.get("/result", async (req, res) => {
         const item = await Cache.getServiceDetail(s);
         if (item !== undefined) {
             details.push(item);
-            console.log(JSON.stringify(item));
         }
     }
     res.render("result", { serviceList: details });
