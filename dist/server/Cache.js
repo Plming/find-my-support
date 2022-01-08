@@ -13,7 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fetch_1 = __importDefault(require("node-fetch"));
-require("dotenv").config();
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class Cache {
     static getSupportConditions() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -47,7 +48,7 @@ class Cache {
             params.append("perPage", "0");
             params.append("serviceKey", process.env.API_AUTH_KEY);
             url.search = params.toString();
-            const body = yield (0, node_fetch_1.default)(url).then((res) => res.json());
+            const body = yield (0, node_fetch_1.default)(url.href).then((res) => res.json());
             Cache.supportConditionCache = {
                 createdAt: new Date(),
                 data: body.data
@@ -61,7 +62,7 @@ class Cache {
             params.append("perPage", "0");
             params.append("serviceKey", process.env.API_AUTH_KEY);
             url.search = params.toString();
-            const body = yield (0, node_fetch_1.default)(url).then((res) => res.json());
+            const body = yield (0, node_fetch_1.default)(url.href).then((res) => res.json());
             const result = {};
             for (const s of body.data) {
                 result[s.SVC_ID] = s;

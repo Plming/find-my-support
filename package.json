@@ -4,8 +4,8 @@
   "description": "웹프로그래밍 프로젝트",
   "main": "app.js",
   "scripts": {
-    "start": "tsc --build && node dist/server/server.js",
-    "dev": "nodemon -e html,js,ejs dist/server/server.js",
+    "start": "tsc --build && node dist/server/app.js",
+    "dev": "nodemon -e html,js,ejs dist/server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

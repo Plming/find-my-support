@@ -1,8 +1,5 @@
-# for using heroku cache
+# unnecessary because heroku using own cache
 /node_modules 
-
-# open api cache file
-/cache
 
 npm-debug.log
 .DS_Store

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function isAvailable(conditionQuery, conditions) {
     const birthdate = new Date(conditionQuery.birthday);
     conditionQuery.age = new Date().getFullYear() - birthdate.getFullYear() + 1;
@@ -41,4 +42,4 @@ function isAvailable(conditionQuery, conditions) {
     //#endregion
     return true;
 }
-module.exports = isAvailable;
+exports.default = isAvailable;
