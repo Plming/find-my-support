@@ -17,7 +17,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const process_1 = __importDefault(require("process"));
 const isAvailable_1 = __importDefault(require("./isAvailable"));
-const cache_foo_1 = __importDefault(require("./cache_foo"));
+const cache_1 = __importDefault(require("./cache"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = (_a = process_1.default.env.PORT) !== null && _a !== void 0 ? _a : 3000;
@@ -34,7 +34,7 @@ app.get("/entry", (req, res) => {
 });
 app.get("/result", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const availableServices = [];
-    const conditions = yield cache_foo_1.default.getSupportConditions();
+    const conditions = yield cache_1.default.getSupportConditions();
     for (const c of conditions) {
         if ((0, isAvailable_1.default)(req.query, c)) {
             availableServices.push(c["SVC_ID"]);
@@ -42,7 +42,7 @@ app.get("/result", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     const details = [];
     for (const s of availableServices) {
-        const item = yield cache_foo_1.default.getServiceDetail(s);
+        const item = yield cache_1.default.getServiceDetail(s);
         if (item !== undefined) {
             details.push(item);
         }

@@ -3,7 +3,7 @@ import express from "express";
 import process from "process";
 
 import isAvailable from "./isAvailable";
-import Cache from "./cache_foo";
+import Cache from "./cache";
 
 dotenv.config();
 
