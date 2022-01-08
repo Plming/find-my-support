@@ -2,6 +2,7 @@
 /node_modules 
 
 # typescript compiled output
+/dist
 /**/*.js
 
 npm-debug.log
