@@ -4,7 +4,7 @@ import process from "process";
 import path from "path";
 
 import isAvailable from "./isAvailable";
-import Cache from "./cache";
+import * as Cache from "./cache";
 
 dotenv.config();
 
@@ -26,20 +26,23 @@ app.get("/entry", (req, res) => {
 });
 
 app.get("/result", async (req, res) => {
-    const availableServices = [];
-    const conditions = await Cache.getSupportConditions();
+    const availableServiceIdList: string[] = [];
+
+    const conditions: SupportConditionsModel[] = await Cache.getSupportConditions();
     for (const c of conditions) {
         if (isAvailable(req.query, c)) {
-            availableServices.push(c["SVC_ID"]);
+            availableServiceIdList.push(c["SVC_ID"]);
         }
     }
-    const details = [];
-    for (const s of availableServices) {
-        const item = await Cache.getServiceDetail(s);
-        if (item !== undefined) {
+
+    const details: ServiceDetailModel[] = [];
+    for (const serviceId of availableServiceIdList) {
+        const item = await Cache.getServiceDetailOrNull(serviceId);
+        if (item !== null) {
             details.push(item);
         }
     }
+
     res.render("result", { serviceList: details });
 });
 
@@ -49,5 +52,17 @@ app.listen(port, () => {
         process.exit(1);
     }
 
-    console.log(`Express app is running on http://find-my-support.herokuapp.com`);
+    switch (process.env.NODE_ENV) {
+        case "production":
+            console.log(`Express app is running on http://find-my-support.herokuapp.com`);
+            break;
+
+        case "development":
+            console.log(`Express app is running on http://localhost:${port}`);
+            break;
+
+        default:
+            console.log("NODE_ENV is not set!");
+            break;
+    }
 });

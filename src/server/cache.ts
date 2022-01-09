@@ -3,83 +3,55 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-interface SupportConditionCache {
-  createdAt: Date;
-  data: supportConditions_model[];
-}
-
 interface ServiceDetailCache {
-  createdAt: Date,
-  data: {
-    [key: string]: serviceDetail_model
-  }
+  [key: ServiceDetailModel["SVC_ID"]]: ServiceDetailModel
 }
 
-export default class Cache {
-  private static readonly BASE_URL = "https://api.odcloud.kr/api/";
+export async function getSupportConditions(): Promise<SupportConditionsModel[]> {
+  return supportConditions;
+}
 
-  private static supportConditionCache: SupportConditionCache | null = null;
-  private static serviceDetailCache: ServiceDetailCache | null = null;
+export async function getServiceDetailOrNull(serviceId: string): Promise<ServiceDetailModel | null> {
+  return serviceId in serviceDetails
+    ? serviceDetails[serviceId]
+    : null;
+}
 
-  public static async getSupportConditions(): Promise<supportConditions_model[]> {
-    if (Cache.supportConditionCache === null) {
-      await this.refreshSupportConditions();
-    } else {
-      const lastCachedAt = Cache.supportConditionCache.createdAt;
-      const diff = new Date().getTime() - lastCachedAt.getTime();
+let supportConditions: SupportConditionsModel[];
+let serviceDetails: ServiceDetailCache;
 
-      // 1 day in milliseconds
-      const diffToRefresh = 1000 * 60 * 60 * 24;
+initalize()
 
-      if (diff > diffToRefresh) {
-        this.refreshSupportConditions();
+async function initalize(): Promise<void> {
+  // 1. caching support conditions
+  await fetch(url("supportConditions", 0))
+    .then(res => res.json())
+    .then((body: SupportConditionsApi) => {
+      supportConditions = body["data"];
+    });
+
+  // 2. check totalCount of service detail
+  const totalCount = await fetch(url("serviceDetail", 1))
+    .then(res => res.json())
+    .then((body: ServiceDetailApi) => body["totalCount"]);
+
+  // 3. caching service detail
+  await fetch(url("serviceDetail", totalCount))
+    .then(res => res.json())
+    .then((body: ServiceDetailApi) => {
+      serviceDetails = {};
+
+      for (const s of body.data) {
+        const serviceId = s.SVC_ID;
+        serviceDetails[serviceId] = s;
       }
-    }
+    });
 
-    return Cache.supportConditionCache!.data;
-  }
+  console.log("caching api result done!");
+}
 
-  public static async getServiceDetail(SVC_ID: string): Promise<serviceDetail_model> {
-    if (Cache.serviceDetailCache === null) {
-      await this.refreshServiceDetail();
-    }
+function url(resources: string, perPage: number): string {
+  const BASE_URL = "https://api.odcloud.kr/api";
 
-    return Cache.serviceDetailCache!.data[SVC_ID];
-  }
-
-  public static async refreshSupportConditions(): Promise<void> {
-    const url = new URL("gov24/v1/supportConditions", Cache.BASE_URL);
-
-    const params = new URLSearchParams();
-    params.append("perPage", "0");
-    params.append("serviceKey", process.env.API_AUTH_KEY!);
-    url.search = params.toString();
-
-    const body: supportConditions_api = await fetch(url.href).then((res) => res.json());
-
-    Cache.supportConditionCache = {
-      createdAt: new Date(),
-      data: body.data
-    };
-  }
-
-  public static async refreshServiceDetail(): Promise<void> {
-    const url = new URL("gov24/v1/serviceDetail", Cache.BASE_URL);
-
-    const params = new URLSearchParams();
-    params.append("perPage", "0");
-    params.append("serviceKey", process.env.API_AUTH_KEY!);
-    url.search = params.toString();
-
-    const body: serviceDetail_api = await fetch(url.href).then((res) => res.json());
-    const result: { [key: string]: serviceDetail_model } = {};
-    for (const s of body.data) {
-      result[s.SVC_ID] = s;
-    }
-
-    Cache.serviceDetailCache = {
-      createdAt: new Date(),
-      data: result
-    };
-  }
+  return `${BASE_URL}/gov24/v1/${resources}?perPage=${perPage}&serviceKey=${process.env.API_AUTH_KEY}`;
 }
