@@ -4,7 +4,8 @@
   "description": "웹프로그래밍 프로젝트",
   "main": "main.js",
   "scripts": {
-    "start": "tsc --build && node dist/server/main.js",
+    "build": "tsc --build",
+    "start": "node dist/server/main.js",
     "dev": "nodemon -e js,ejs dist/server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

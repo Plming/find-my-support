@@ -1,9 +1,9 @@
 import express from "express";
 import path from "path";
 
-import { isAvailable } from "./isAvailable";
-import * as cache from "./cache";
-import * as db from "./database";
+import { getIndex } from "./controllers/index";
+import { getEntry } from "./controllers/entry";
+import { getResult } from "./controllers/result";
 
 const app = express();
 
@@ -14,32 +14,8 @@ app.set("views", "views");
 app.set("view engine", "ejs");
 
 // routes
-app.get("/", (req, res) => {
-    res.render("index");
-});
-app.get("/entry", (req, res) => {
-    res.render("entry");
-});
-
-app.get("/result", async (req, res) => {
-    const availableServiceIdList: string[] = [];
-
-    const conditions: SupportConditionsModel[] = await cache.getSupportConditions();
-    for (const c of conditions) {
-        if (isAvailable(req.query, c)) {
-            availableServiceIdList.push(c["SVC_ID"]);
-        }
-    }
-
-    const availableServices: ServiceDetailModel[] = [];
-    for (const serviceId of availableServiceIdList) {
-        const matched = await db.serviceDetail.findOne({ SVC_ID: serviceId });
-        if (matched !== null) {
-            availableServices.push(matched);
-        }
-    }
-
-    res.render("result", { availableServices: availableServices });
-});
+app.get("/", getIndex);
+app.get("/entry", getEntry);
+app.get("/result", getResult);
 
 export default app;
