@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
 
-import * as db from "../database";
-import * as cache from "../cache";
+import { serviceDetail, supportConditions } from "../database";
 
 export async function getResult(req: Request, res: Response) {
     // 1. 모든 서비스들의 지원 조건 정보 가져오기
-    const conditions: SupportConditionsModel[] = await cache.getSupportConditions();
+    const findResult: SupportConditionsModel[] = await supportConditions.find({}).toArray();
 
     // 2. 그 중에서 이용가능한 서비스만 뽑아내기
     const availableServiceIdList: string[] = [];
-    for (const c of conditions) {
+    for (const c of findResult) {
         if (isAvailable(req.query, c)) {
             availableServiceIdList.push(c["SVC_ID"]);
         }
@@ -18,7 +17,7 @@ export async function getResult(req: Request, res: Response) {
     // 3. 이용가능한 서비스들의 상세 내용 가져오기
     const availableServices: ServiceDetailModel[] = [];
     for (const serviceId of availableServiceIdList) {
-        const matched = await db.serviceDetail.findOne({ SVC_ID: serviceId });
+        const matched = await serviceDetail.findOne({ SVC_ID: serviceId });
         if (matched !== null) {
             availableServices.push(matched);
         }

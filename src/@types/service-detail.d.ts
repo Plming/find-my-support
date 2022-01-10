@@ -1,11 +1,3 @@
-declare interface ServiceDetailApi {
-    page: number,
-    perPage: number,
-    totalCount: number,
-    currentCount: number,
-    data: ServiceDetailModel[]
-}
-
 declare interface ServiceDetailModel {
     SVC_ID: string,
     지원유형: string,
