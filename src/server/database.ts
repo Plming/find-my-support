@@ -13,6 +13,7 @@ const db = client.db("cache");
 export async function initialize(): Promise<void> {
     await client.connect();
     await db.command({ ping: 1 });
+    console.log("Successfully connected to mongodb");
 }
 
 export const supportConditions = db.collection<SupportConditionsModel>("support-conditions");

@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 
 import { isAvailable } from "./isAvailable";
-import * as Cache from "./cache";
+import * as cache from "./cache";
 import * as db from "./database";
 
 const app = express();
@@ -22,25 +22,24 @@ app.get("/entry", (req, res) => {
 });
 
 app.get("/result", async (req, res) => {
-
     const availableServiceIdList: string[] = [];
 
-    const conditions: SupportConditionsModel[] = await Cache.getSupportConditions();
+    const conditions: SupportConditionsModel[] = await cache.getSupportConditions();
     for (const c of conditions) {
         if (isAvailable(req.query, c)) {
             availableServiceIdList.push(c["SVC_ID"]);
         }
     }
 
-    const details: ServiceDetailModel[] = [];
+    const availableServices: ServiceDetailModel[] = [];
     for (const serviceId of availableServiceIdList) {
         const matched = await db.serviceDetail.findOne({ SVC_ID: serviceId });
         if (matched !== null) {
-            details.push(matched);
+            availableServices.push(matched);
         }
     }
 
-    res.render("result", { serviceList: details });
+    res.render("result", { availableServices: availableServices });
 });
 
 export default app;

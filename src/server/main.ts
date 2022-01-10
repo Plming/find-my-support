@@ -1,19 +1,16 @@
 import dotenv from "dotenv";
 import app from "./app";
 import * as db from "./database";
+import * as cache from "./cache";
 
 dotenv.config();
 const port = process.env.PORT ?? 3000;
 
 // entry point
 async function main() {
-    try {
-        await db.initialize();
-        console.log(await db.serviceDetail.countDocuments());
-        console.log(await db.supportConditions.countDocuments());
-    } catch (error) {
-        console.log(error);
-    }
+    await db.initialize();
+
+    await cache.initalize();
 
     app.listen(port, () => {
         if (process.env.API_AUTH_KEY === undefined) {
