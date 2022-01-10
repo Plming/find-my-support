@@ -1,4 +1,4 @@
-export default function isAvailable(conditionQuery: any, conditions: any): boolean {
+export function isAvailable(conditionQuery: any, conditions: any): boolean {
   const birthdate = new Date(conditionQuery.birthday);
   conditionQuery.age = new Date().getFullYear() - birthdate.getFullYear() + 1;
 
