@@ -1,7 +1,7 @@
 {
   "name": "find-my-support",
   "version": "1.0.0",
-  "description": "웹프로그래밍 프로젝트",
+  "description": "공공데이터를 활용한 공공서비스 조회 서비스",
   "main": "main.js",
   "scripts": {
     "build": "tsc --build",
