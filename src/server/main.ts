@@ -17,7 +17,7 @@ async function main() {
 
         switch (process.env.NODE_ENV) {
             case "production":
-                console.log(`Express app is running on http://find-my-support.herokuapp.com`);
+                console.log(`Express app is running on http://find-my-support.onrender.com`);
                 break;
 
             case "development":
