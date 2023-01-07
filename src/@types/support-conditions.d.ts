@@ -1,6 +1,6 @@
 declare interface SupportConditionsModel {
     /** 공공서비스 고유 식별자 */
-    _id: string,
+    _id: ServiceDetailModel["_id"],
 
     /** 남성 */
     JA0101: "Y"?,
@@ -9,149 +9,155 @@ declare interface SupportConditionsModel {
     JA0102: "Y"?,
 
     /** 영유아(0~5) */
-    JA0103: string,
+    JA0103: "Y"?,
 
     /** 아동(6~12) */
-    JA0104: string,
+    JA0104: "Y"?,
 
     /** 청소년(13~18) */
-    JA0105: string,
+    JA0105: "Y"?,
 
     /** 청년(19~29) */
-    JA0106: string,
+    JA0106: "Y"?,
 
     /** 중년(30~49) */
-    JA0107: string,
+    JA0107: "Y"?,
 
     /** 장년(50~64) */
-    JA0108: string,
+    JA0108: "Y"?,
 
     /** 노년기(65~) */
-    JA0109: string,
+    JA0109: "Y"?,
 
     /** 대상연령(시작) */
-    JA0110: string,
+    JA0110: number,
 
     /** 대상연령(종료) */
-    JA0111: string,
+    JA0111: number,
 
+    //#region 소득 분위
     /** 0 ~ 50 */
-    JA0201: string,
+    JA0201: "Y"?,
 
     /** 51 ~ 75 */
-    JA0202: string,
+    JA0202: "Y"?,
 
     /** 76 ~ 100 */
-    JA0203: string,
+    JA0203: "Y"?,
 
     /** 101 ~ 200 */
-    JA0204: string,
+    JA0204: "Y"?,
 
     /** 200% 초과 */
-    JA0205: string,
+    JA0205: "Y"?,
+    //#endregion 소득 분위
 
+    //#region 개인 특성
     /** 예비부모/난임 */
-    JA0301: string,
+    JA0301: "Y"?,
 
     /** 임신부 */
-    JA0302: string,
+    JA0302: "Y"?,
 
     /** 출산/입양 */
-    JA0303: string,
+    JA0303: "Y"?,
 
     /** 심한 장애 */
-    JA0304: string,
+    JA0304: "Y"?,
 
     /** 심하지 않은 장애 */
-    JA0305: string,
+    JA0305: "Y"?,
 
     /** 독립유공자 */
-    JA0306: string,
+    JA0306: "Y"?,
 
     /** 국가유공자 */
-    JA0307: string,
+    JA0307: "Y"?,
 
     /** 참전유공자 */
-    JA0308: string,
+    JA0308: "Y"?,
 
     /** 보훈보상대상자 */
-    JA0309: string,
+    JA0309: "Y"?,
 
     /** 특수임무유공자 */
-    JA0310: string,
+    JA0310: "Y"?,
 
     /** 5·18민주유공자 */
-    JA0311: string,
+    JA0311: "Y"?,
 
     /** 제대군인 */
-    JA0312: string,
+    JA0312: "Y"?,
 
     /** 농업인 */
-    JA0313: string,
+    JA0313: "Y"?,
 
     /** 어업인 */
-    JA0314: string,
+    JA0314: "Y"?,
 
     /** 축산업인 */
-    JA0315: string,
+    JA0315: "Y"?,
 
     /** 임업인 */
-    JA0316: string,
+    JA0316: "Y"?,
 
     /** 초등학생 */
-    JA0317: string,
+    JA0317: "Y"?,
 
     /** 중학생 */
-    JA0318: string,
+    JA0318: "Y"?,
 
     /** 고등학생 */
-    JA0319: string,
+    JA0319: "Y"?,
 
     /** 대학생/대학원생 */
-    JA0320: string,
+    JA0320: "Y"?,
 
     /** 해당사항없음 */
-    JA0322: string,
+    JA0322: "Y"?,
 
     /** 질병/부상/질환자 */
-    JA0323: string,
+    JA0323: "Y"?,
 
     /** 중증·난치·희귀질환자 */
-    JA0324: string,
+    JA0324: "Y"?,
 
     /** 요양환자/치매환자 */
-    JA0325: string,
+    JA0325: "Y"?,
 
     /** 근로자/직장인 */
-    JA0326: string,
+    JA0326: "Y"?,
 
     /** 구직자/실업자 */
-    JA0327: string,
+    JA0327: "Y"?,
+    //#endregion 개인 특성
 
+    //#region 가구 특성
     /** 다문화가족 */
-    JA0401: string,
+    JA0401: "Y"?,
 
     /** 북한이탈주민 */
-    JA0402: string,
+    JA0402: "Y"?,
 
     /** 한부모가정/조손가정 */
-    JA0403: string,
+    JA0403: "Y"?,
 
     /** 1인가구 */
-    JA0404: string,
+    JA0404: "Y"?,
 
     /** 해당사항없음 */
-    JA0410: string,
+    JA0410: "Y"?,
 
     /** 다자녀가구 */
-    JA0411: string,
+    JA0411: "Y"?,
 
     /** 무주택세대 */
-    JA0412: string,
+    JA0412: "Y"?,
 
     /** 신규전입 */
-    JA0413: string,
+    JA0413: "Y"?,
 
     /** 확대가족 */
-    JA0414: string
+    JA0414: "Y"?
+    //#endregion 가구 특성
 }
