@@ -1,5 +1,5 @@
 declare interface ServiceDetailModel {
-    SVC_ID: string,
+    _id: string,
     지원유형: string,
     서비스명: string,
     서비스목적: string,

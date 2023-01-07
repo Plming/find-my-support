@@ -16,5 +16,5 @@ export async function initialize(): Promise<void> {
     console.log("Successfully connected to mongodb");
 }
 
-export const supportConditions = db.collection<SupportConditionsModel>("support-conditions");
-export const serviceDetail = db.collection<ServiceDetailModel>("service-detail");
+export const supportConditions = db.collection<SupportConditionsModel>("supportConditions");
+export const serviceDetail = db.collection<ServiceDetailModel>("serviceDetail");

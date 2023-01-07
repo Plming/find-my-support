@@ -1,20 +1,12 @@
-declare interface SupportConditionsApi {
-    page: number,
-    perPage: number,
-    totalCount: number,
-    currentCount: number,
-    data: SupportConditionsModel[]
-}
-
 declare interface SupportConditionsModel {
     /** 공공서비스 고유 식별자 */
-    SVC_ID: string,
+    _id: string,
 
     /** 남성 */
-    JA0101: string,
+    JA0101: "Y"?,
 
     /** 여성 */
-    JA0102: string,
+    JA0102: "Y"?,
 
     /** 영유아(0~5) */
     JA0103: string,
