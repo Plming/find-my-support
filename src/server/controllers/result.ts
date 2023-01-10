@@ -15,14 +15,7 @@ export async function getResult(req: Request, res: Response) {
     }
 
     // 3. 이용가능한 서비스들의 상세 내용 가져오기
-    const availableServices: ServiceDetailModel[] = [];
-    for (const serviceId of availableServiceIdList) {
-        const matched = await serviceDetail.findOne({ _id: serviceId });
-        if (matched !== null) {
-            availableServices.push(matched);
-        }
-    }
-
+    const availableServices: ServiceDetailModel[] = await serviceDetail.find({ _id: { $in: availableServiceIdList } }).toArray();
     res.render("result", { availableServices: availableServices });
 };
 
