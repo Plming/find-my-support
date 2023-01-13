@@ -3,8 +3,14 @@ import { Request, Response } from "express";
 import { serviceDetail, supportConditions } from "../database";
 
 export async function getResult(req: Request, res: Response) {
+    const filter: any = {};
+    const genderCode = req.query["gender"] as string;
+    filter[genderCode] = "Y";
+    const incomeType = req.query["income"] as string;
+    filter[incomeType] = "Y";
+
     // 1. 모든 서비스들의 지원 조건 정보 가져오기
-    const findResult: SupportConditionsModel[] = await supportConditions.find({}).toArray();
+    const findResult: SupportConditionsModel[] = await supportConditions.find(filter).toArray();
 
     // 2. 그 중에서 이용가능한 서비스만 뽑아내기
     const availableServiceIdList: string[] = [];
