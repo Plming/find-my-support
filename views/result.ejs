@@ -20,7 +20,7 @@
       <div class="row pt-5 gy-3">
         <% for (const service of availableServices) { %>
           <div class="col-md-4 px-3">
-            <%- include('./partial/card', {service: service}) %>
+            <%- include('./partial/card', {service: service.serviceDetail[0]}) %>
           </div>
           <% } %>
       </div>

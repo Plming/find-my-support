@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 
-import { getResult } from "./controllers/result";
+import getResult from "./controllers/result";
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-app.get("/entry", (req, res)=> {
+app.get("/entry", (req, res) => {
     res.render("entry");
 });
 

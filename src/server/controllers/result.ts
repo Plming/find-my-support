@@ -1,86 +1,86 @@
 import { Request, Response } from "express";
+import { Filter } from "mongodb";
 
-import { serviceDetail, supportConditions } from "../database";
+import { supportConditions } from "../database";
 
-export async function getResult(req: Request, res: Response) {
-    const filter: any = {};
-    const genderCode = req.query["gender"] as string;
-    filter[genderCode] = "Y";
-    const incomeType = req.query["income"] as string;
-    filter[incomeType] = "Y";
-
-    // 1. 모든 서비스들의 지원 조건 정보 가져오기
-    const findResult: SupportConditionsModel[] = await supportConditions.find(filter).toArray();
-
-    // 2. 그 중에서 이용가능한 서비스만 뽑아내기
-    const availableServiceIdList: string[] = [];
-    for (const c of findResult) {
-        if (isAvailable(req.query, c)) {
-            availableServiceIdList.push(c["_id"]);
-        }
+export default async function getResult(req: Request, res: Response) {
+    // 1. query string의 정보 가공하기
+    const userInformation = {
+        gender: req.query["gender"] as string,
+        age: new Date().getFullYear() - new Date(req.query["birthdate"] as string).getFullYear() + 1,
+        income: req.query["income"] as string,
+        personalAttributes: new Array<string>(),
+        familyAttributes: new Array<string>()
     }
 
-    // 3. 이용가능한 서비스들의 상세 내용 가져오기
-    const availableServices: ServiceDetailModel[] = await serviceDetail.find({ _id: { $in: availableServiceIdList } }).toArray();
+    Object.keys(req.query).forEach(key => {
+        if (key.startsWith("JA03")) {
+            userInformation.personalAttributes.push(key);
+        } else if (key.startsWith("JA04")) {
+            userInformation.familyAttributes.push(key);
+        }
+    });
+
+    // 2. 쿼리 만들기
+    const filter: Filter<SupportConditionsModel> = {
+        [userInformation.gender]: "Y",
+        [userInformation.income]: "Y",
+        $or: [
+            {
+                JA0110: { $lte: userInformation.age },
+                JA0111: { $gte: userInformation.age }
+            },
+            {
+                [getAgeCategory(userInformation.age)]: "Y"
+            }
+        ]
+    };
+
+    for (const attr of userInformation.personalAttributes) {
+        filter[attr] = "Y";
+    }
+
+    for (const attr of userInformation.familyAttributes) {
+        filter[attr] = "Y";
+    }
+
+    // 3. 조인하여 결과 가져오기
+    const cursor = supportConditions.aggregate()
+        .match(filter)
+        .project({
+            _id: true
+        })
+        .lookup({
+            from: "serviceDetail",
+            localField: "_id",
+            foreignField: "_id",
+            as: "serviceDetail"
+        });
+
+    const availableServices = await cursor.toArray();
     res.render("result", { availableServices: availableServices });
 };
 
-// TODO: any 타입 수정하기
-function isAvailable(conditionQuery: any, conditions: any): boolean {
-    const birthdate = new Date(conditionQuery.birthday);
-    conditionQuery.age = new Date().getFullYear() - birthdate.getFullYear() + 1;
-
-    //#region checkGender
-    if (conditions[conditionQuery["gender"]] !== "Y") {
-        return false;
+function getAgeCategory(age: number): string {
+    if (age >= 65) {
+        return "JA0109";
     }
-    //#endregion
-
-    //#region checkAge
-    // JA0103 ~ JA0109 (age level param) seems not to be used.
-    if (
-        conditionQuery["age"] < conditions["JA0110"] ||
-        conditionQuery["age"] > conditions["JA0111"]
-    ) {
-        return false;
+    else if (age >= 50) {
+        return "JA0108";
     }
-    //#endregion
-
-    //#region checkIncomeLevel
-    if (conditions[conditionQuery["income"]] !== "Y") {
-        return false;
+    else if (age >= 30) {
+        return "JA0107";
     }
-    //#endregion
-
-    //#region checkPersonalAttributes
-    // JA03XX is personal attribute
-    {
-        const myPersonalAttributes = Object.keys(conditionQuery).filter((v) =>
-            v.startsWith("JA03")
-        );
-        const intersectedAttributes = myPersonalAttributes.filter(
-            (a) => conditions[a] === "Y"
-        );
-        if (intersectedAttributes.length === 0) {
-            return false;
-        }
+    else if (age >= 19) {
+        return "JA0106";
     }
-    //#endregion
-
-    //#region checkFamilyAttributes
-    // JA04XX is family attribute
-    {
-        const myFamilyAttributes = Object.keys(conditionQuery).filter((v) =>
-            v.startsWith("JA04")
-        );
-        const intersectedAttributes = myFamilyAttributes.filter(
-            (a) => conditions[a] === "Y"
-        );
-        if (intersectedAttributes.length === 0) {
-            return false;
-        }
+    else if (age >= 13) {
+        return "JA0105";
     }
-    //#endregion
-
-    return true;
+    else if (age >= 6) {
+        return "JA0104";
+    }
+    else {
+        return "JA0103";
+    }
 }
